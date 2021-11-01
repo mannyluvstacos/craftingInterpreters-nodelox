@@ -34,7 +34,7 @@ function runPrompt () {
     rl.setPrompt('> ')
     rl.prompt()
     run(line)
-    hadError = false;
+    hadError = false
   })
 }
 
