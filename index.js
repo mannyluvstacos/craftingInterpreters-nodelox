@@ -3,7 +3,7 @@ import * as readline from 'node:readline/promises'
 import * as path from 'node:path'
 import { stdin as input, stdout as output } from 'process'
 
-let hadError = false
+const hadError = false
 
 function main () {
   const args = process.argv.slice(2)
@@ -22,19 +22,18 @@ function main () {
    run(new String(bytes, Charset.defaultCharset()));
  } */
 
-function runFile(filePath){
-  const normalizedFilePath = path.normalize(filePath);
-  runFile(normalizedFilePath);
+function runFile (filePath) {
+  const normalizedFilePath = path.normalize(filePath)
+  runFile(normalizedFilePath)
 }
 
-main();
-
+main()
 
 /*   private static void runPrompt() throws IOException {
     InputStreamReader input = new InputStreamReader(System.in);
     BufferedReader reader = new BufferedReader(input);
 
-    for (;;) { 
+    for (;;) {
       System.out.print("> ");
       String line = reader.readLine();
       if (line == null) break;
@@ -43,6 +42,11 @@ main();
   }
  */
 
-function runPrompt() {
-  const rl = readline.createInterface({input,output})
+function runPrompt () {
+  const rl = readline.createInterface({ input, output })
+  rl.prompt()
+  rl.on('line', (line) => {
+    rl.prompt()
+  // run(line);
+  })
 }
