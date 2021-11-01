@@ -1,5 +1,6 @@
 
 import * as readline from 'node:readline/promises'
+import * as path from 'node:path'
 import { stdin as input, stdout as output } from 'process'
 
 let hadError = false
@@ -16,43 +17,32 @@ function main () {
   }
 }
 
-// string
-function runFile (fileName) {
-  // Indicated an error in the exit code.
-  if (hadError) process.exit(9)
+/*  private static void runFile(String path) throws IOException {
+   byte[] bytes = Files.readAllBytes(Paths.get(path));
+   run(new String(bytes, Charset.defaultCharset()));
+ } */
 
-  // throwsIOException
-  run(fileName)
+function runFile(filePath){
+  const normalizedFilePath = path.normalize(filePath);
+  runFile(normalizedFilePath);
 }
 
-function runPrompt () {
-// throwsIOException
-  const rl = readline.createInterface({ input, output })
-  rl.prompt()
+main();
 
-  rl.on('line', (line) => {
-    rl.setPrompt('> ')
-    rl.prompt()
-    run(line)
-    hadError = false
-  })
+
+/*   private static void runPrompt() throws IOException {
+    InputStreamReader input = new InputStreamReader(System.in);
+    BufferedReader reader = new BufferedReader(input);
+
+    for (;;) { 
+      System.out.print("> ");
+      String line = reader.readLine();
+      if (line == null) break;
+      run(line);
+    }
+  }
+ */
+
+function runPrompt() {
+  const rl = readline.createInterface({input,output})
 }
-
-// string
-function run (line) {
-// take the lines and break them up into tokens
-
-  const tokens = line.split(/\s/)
-  console.log({ tokens })
-}
-
-function error (lineNumber, message) {
-  report(lineNumber, '', message)
-}
-
-function report (lineNumber, where, message) {
-  console.error(`[line ${lineNumber}] Error ${where}: ${message}`)
-  hadError = true
-}
-
-main()
