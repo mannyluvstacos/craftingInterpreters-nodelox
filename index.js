@@ -7,17 +7,25 @@ import { stdin as input, stdout as output } from 'process'
 //will revisit later
 let hadError = false
 
-function main () {
-  const args = process.argv.slice(2)
-  if (args.length > 1) {
-    console.log('Usage: nodelox [script]')
-    process.exit(9)
-  } else if (args.length === 1) {
-    runFile(args[0])
-  } else {
-    runPrompt()
+
+class Lox {
+  hadError = false
+
+  main () {
+    const args = process.argv.slice(2)
+    if (args.length > 1) {
+      console.log('Usage: nodelox [script]')
+      process.exit(9)
+    } else if (args.length === 1) {
+      runFile(args[0])
+    } else {
+      runPrompt()
+    }
   }
+
 }
+
+
 
 /*  private static void runFile(String path) throws IOException {
    byte[] bytes = Files.readAllBytes(Paths.get(path));
@@ -30,8 +38,6 @@ function runFile (filePath) {
 
   if (hadError) process.exit(9)
 }
-
-main()
 
 /*   private static void runPrompt() throws IOException {
     InputStreamReader input = new InputStreamReader(System.in);
