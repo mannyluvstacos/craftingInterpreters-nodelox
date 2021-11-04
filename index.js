@@ -3,12 +3,9 @@ import * as readline from 'node:readline/promises'
 import * as path from 'node:path'
 import { stdin as input, stdout as output } from 'process'
 
-//may need to create a Lox class
-//will revisit later
-let hadError = false
 
 
-class Lox {
+export class Lox {
   hadError = false
 
   main () {
@@ -23,20 +20,16 @@ class Lox {
     }
   }
 
-}
-
-
-
 /*  private static void runFile(String path) throws IOException {
    byte[] bytes = Files.readAllBytes(Paths.get(path));
    run(new String(bytes, Charset.defaultCharset()));
  } */
 
-function runFile (filePath) {
+ runFile (filePath) {
   const normalizedFilePath = path.normalize(filePath)
   run(normalizedFilePath)
 
-  if (hadError) process.exit(9)
+  if (this.hadError) process.exit(9)
 }
 
 /*   private static void runPrompt() throws IOException {
@@ -52,13 +45,13 @@ function runFile (filePath) {
   }
  */
 
-function runPrompt () {
+runPrompt () {
   const rl = readline.createInterface({ input, output })
   rl.prompt()
   rl.on('line', (line) => {
     rl.prompt()
     run(line)
-    hadError = false
+    this.hadError = false
   })
 }
 
@@ -72,7 +65,7 @@ function runPrompt () {
   }
 } */
 
-function run (source) {
+run (source) {
   const scanner = Scanner(source)
   const tokens = scanner.scanTokens()
 
@@ -90,15 +83,22 @@ function run (source) {
                              String message) {
     System.err.println(
         "[line " + line + "] Error" + where + ": " + message);
-    hadError = true;
+    this.hadError = true;
   }
  */
 
-function error (lineNumber, message) {
+error (lineNumber, message) {
   report(lineNumber, '', message)
 }
 
-function report (lineNumber, location, message) {
+report (lineNumber, location, message) {
   console.error(`[line ${lineNumber}] Error ${location}: ${message}`)
-  hadError = true
+  this.hadError = true
 }
+
+
+
+}
+
+
+
