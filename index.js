@@ -2,7 +2,8 @@
 import * as readline from 'node:readline/promises'
 import * as path from 'node:path'
 import { stdin as input, stdout as output } from 'process'
-
+import {Scanner} from './Scanner'
+import {error as importedError} from './error'
 
 
 export class Lox {
@@ -86,17 +87,7 @@ run (source) {
     this.hadError = true;
   }
  */
-
-error (lineNumber, message) {
-  report(lineNumber, '', message)
-}
-
-report (lineNumber, location, message) {
-  console.error(`[line ${lineNumber}] Error ${location}: ${message}`)
-  this.hadError = true
-}
-
-
+error = importedError;
 
 }
 
