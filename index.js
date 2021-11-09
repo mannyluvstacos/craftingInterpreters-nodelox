@@ -2,8 +2,8 @@
 import * as readline from 'node:readline/promises'
 import * as path from 'node:path'
 import { stdin as input, stdout as output } from 'process'
-import {Scanner} from './Scanner'
-import {error as importedError} from './error'
+import {Scanner} from './Scanner.js'
+import {error as importedError} from './error.js'
 
 
 export class Lox {
@@ -17,7 +17,7 @@ export class Lox {
     } else if (args.length === 1) {
       runFile(args[0])
     } else {
-      runPrompt()
+      this.runPrompt()
     }
   }
 
@@ -50,9 +50,10 @@ runPrompt () {
   const rl = readline.createInterface({ input, output })
   rl.prompt()
   rl.on('line', (line) => {
-    rl.prompt()
-    run(line)
+    this.run(line)
     this.hadError = false
+    rl.setPrompt('>')
+    rl.prompt()
   })
 }
 
@@ -67,11 +68,11 @@ runPrompt () {
 } */
 
 run (source) {
-  const scanner = Scanner(source)
+  const scanner = new Scanner(source)
   const tokens = scanner.scanTokens()
 
   for (const token in tokens) {
-    console.log({ token })
+    console.log({ token: tokens[token] })
   }
 }
 
@@ -93,3 +94,7 @@ error = importedError;
 
 
 
+(()=>{
+  let lox = new Lox();
+  lox.main()
+})();
