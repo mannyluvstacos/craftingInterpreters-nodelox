@@ -3,7 +3,7 @@ import fs from 'node:fs'
 export class GenerateAst {
   main () {
     const args = process.argv.slice(2)
-    if (args.length != 1) {
+    if (args.length !== 1) {
       console.error('Usage: generate_ast <output directory>')
       process.exit(64)
     }
@@ -30,7 +30,7 @@ export class GenerateAst {
       writer.write('\n')
     }
 
-    writer.write("\n");
+    writer.write('\n')
     writer.end()
   }
 
@@ -49,16 +49,14 @@ export class GenerateAst {
       writer.write('    this.' + name + ' = ' + name + ';\n')
     }
 
-    writer.write('  }')
+    writer.write('  }\n')
 
-//Visitor ?
-writer.write("  accept(visitor) {\n");
-writer.write("  return visitor.visit"+className+baseName+"(this);\n")
-writer.write("    }");
+    // Visitor ?
+    writer.write('  accept(visitor) {\n')
+    writer.write('  return visitor.visit' + className + baseName + '(this);\n')
+    writer.write('    }')
 
-
-
-// Fields.
+    // Fields.
     for (const field of fields) {
       writer.write('  ' + field + ';\n')
     }

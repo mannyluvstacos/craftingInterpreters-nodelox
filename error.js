@@ -12,6 +12,8 @@
   }
  */
 
+import { TokenType } from './TokenType.js'
+
 export function error (lineNumber, message) {
   report(lineNumber, '', message)
 }
@@ -19,4 +21,12 @@ export function error (lineNumber, message) {
 function report (lineNumber, location, message) {
   console.error(`[line ${lineNumber}] Error ${location}: ${message}`)
   this.hadError = true
+}
+
+export function tokenError (token, message) {
+  if (token.type === TokenType.EOF) {
+    report(token.line, ' at end', message)
+  } else {
+    report(token.line, " at '", token.lexeme + "'" + message)
+  }
 }

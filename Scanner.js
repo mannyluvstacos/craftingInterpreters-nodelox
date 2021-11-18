@@ -101,7 +101,7 @@ export class Scanner {
         }
         let text = this.source.substring(this.start, this.current);
         let type = this.keywords.get(text);
-        if(type == null) type = TokenType.IDENTIFIER;
+        if(type === null) type = TokenType.IDENTIFIER;
         this.addToken(type);
     }
 
@@ -110,7 +110,7 @@ export class Scanner {
             this.advance();
         }
 
-        if(this.peek() == '.' && this.isDigit(this.peekNext())) {
+        if(this.peek() === '.' && this.isDigit(this.peekNext())) {
             this.advance();
 
             while(this.isDigit(this.peek())){
@@ -122,7 +122,7 @@ export class Scanner {
 
      string(){
         while(this.peek() != '"' && !this.isAtEnd()) {
-            if(this.peek() == '\n') this.line++;
+            if(this.peek() === '\n') this.line++;
             this.advance();
         }
 
@@ -151,14 +151,14 @@ export class Scanner {
     }
 
     peekNext(){
-        if(this.current + 1 >= this.source.length()) return '\0';
-        return this.source.chartAt(this.current + 1);
+        if(this.current + 1 >= this.source.length) return '\0';
+        return this.source.charAt(this.current + 1);
     }
 
     isAlpha(character) {
         return (character >= 'a' && character <= 'z') ||
             (character >= 'A' && character <= 'Z') ||
-            character == '_';
+            character === '_';
     }
 
     isAlphaNumeric(character) {

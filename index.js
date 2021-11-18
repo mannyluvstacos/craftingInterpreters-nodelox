@@ -4,6 +4,8 @@ import * as path from 'node:path'
 import { stdin as input, stdout as output } from 'process'
 import {Scanner} from './Scanner.js'
 import {error as importedError} from './error.js'
+import {Parser} from './Parser.js'
+import { AstPrinter } from './AstPrinter.js'
 
 
 export class Lox {
@@ -71,9 +73,16 @@ run (source) {
   const scanner = new Scanner(source)
   const tokens = scanner.scanTokens()
 
-  for (const token in tokens) {
-    console.log({ token: tokens[token] })
-  }
+  // for (const token in tokens) {
+  //   console.log({ token: tokens[token] })
+  // }
+
+  const parser = new Parser(tokens);
+  let expression = parser.parse();
+
+  if(this.hadError) return;
+
+  console.log(new AstPrinter().print(expression));
 }
 
 /*
