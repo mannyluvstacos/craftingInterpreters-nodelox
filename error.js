@@ -30,3 +30,8 @@ export function tokenError (token, message) {
     report(token.line, " at '", token.lexeme + "'" + message)
   }
 }
+
+export function runtimeError(error) {
+  console.log(error.message, +  "\n[line " + error.token.line + "]");
+  this.hadRuntimeError = true;
+}

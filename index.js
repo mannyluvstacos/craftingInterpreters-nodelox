@@ -6,10 +6,13 @@ import {Scanner} from './Scanner.js'
 import {error as importedError} from './error.js'
 import {Parser} from './Parser.js'
 import { AstPrinter } from './AstPrinter.js'
+import { Interpreter } from './Interpreter.js'
 
 
 export class Lox {
+  interpreter = new Interpreter();
   hadError = false
+  hadRuntimeError = false;
 
   main () {
     const args = process.argv.slice(2)
@@ -33,6 +36,7 @@ export class Lox {
   run(normalizedFilePath)
 
   if (this.hadError) process.exit(9)
+  if (hadRuntimeError) System.exit(70);
 }
 
 /*   private static void runPrompt() throws IOException {
@@ -82,7 +86,8 @@ run (source) {
 
   if(this.hadError) return;
 
-  console.log(new AstPrinter().print(expression));
+  // console.log(new AstPrinter().print(expression));
+  this.interpreter.interpret(expression);
 }
 
 /*

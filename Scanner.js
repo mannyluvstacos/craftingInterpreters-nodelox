@@ -59,7 +59,7 @@ export class Scanner {
             case '!':this.addToken(this.match('=') ? TokenType.BANG_EQUAL:TokenType.BANG ); break;
             case '=':this.addToken(this.match('=') ? TokenType.EQUAL_EQUAL: TokenType.EQUAL ); break;
             case '<':this.addToken(this.match('=') ? TokenType.LESS_EQUAL: TokenType.LESS ); break;
-            case '?':this.addToken(this.match('=') ? TokenType.GREATER_EQUAL:TokenType.GREATER); break;
+            case '>':this.addToken(this.match('=') ? TokenType.GREATER_EQUAL:TokenType.GREATER); break;
             case '/':
                 if(this.match('/')) {
                     while(this.peek() != '\n' && !this.isAtEnd()) this.advance();
