@@ -55,7 +55,7 @@ export class Parser {
         }
 
         this.consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
-        return new Stmt.Var(namne, initializer);
+        return new Stmt.Var(name, initializer);
     }
 
     expressionStatement(){
