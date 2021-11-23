@@ -28,7 +28,11 @@ export class Parser {
 
     declaration(){
         try {
-            if(this.match([TokenType.VAR])) return this.varDeclaration();
+            if(this.match([TokenType.VAR])) {
+                let varDeclaration = this.varDeclaration();
+                console.log({varDeclaration})
+                return varDeclaration
+            }
 
             return this.statement();
         } catch (error) {
@@ -154,15 +158,21 @@ export class Parser {
     }
 
     consume(type, message){
+        console.log("in consume", {type, message})
         if(this.check(type)) return this.advance();
 
         throw this.error(this.peek(), message);
     }
     
     check(type){
-        if(this.isAtEnd()) return false;
+        console.log("in check", {type});
+        const isAtEnd = this.isAtEnd();
+        console.log({isAtEnd})
+        if(isAtEnd) return false;
 
-        return this.peek().type === type;
+        const peekType = this.peek().type;
+        console.log({peekType})
+        return peekType === type;
     }
 
     advance(){
@@ -175,6 +185,7 @@ export class Parser {
     }
 
     peek() {
+        console.log(this)
         return this.tokens[this.current];
     }
 
