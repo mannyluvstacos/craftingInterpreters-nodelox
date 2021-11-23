@@ -111,6 +111,12 @@ export class Interpreter {
     return null;
   }
 
+  visitAssignExpr(expr){
+    let value = this.evaluate(expr.value);
+    this.environment.assign(expr.name, value);
+    return value;
+  }
+
   visitBinaryExpr (expr) {
     const left = this.evaluate(expr.left)
     const right = this.evaluate(expr.right)

@@ -23,7 +23,7 @@ export class Parser {
     }
 
     expression(){
-        return this.equality();
+        return this.assignment();
     }
 
     declaration(){
@@ -67,7 +67,25 @@ export class Parser {
         let expr = this.expression();
         this.consume(TokenType.SEMICOLON, "Expect ';' after expression.");
         return new Stmt.Expression(expr);
-    }    
+    }
+    
+    assignment() {
+        let expr = this.equality();
+
+        if(this.match([TokenType.EQUAL])) {
+            let equals = this.previous();
+            let value = this.assignment();
+
+            if(expr instanceof Expr.Variable) {
+                let name = expr.name;
+                return new Expr.Assign(name, value);
+            }
+
+            err.error(this.equals, "Invalid assignment target.");
+        }
+
+        return expr;
+    }
 
     equality(){
         let expr = this.comparison();

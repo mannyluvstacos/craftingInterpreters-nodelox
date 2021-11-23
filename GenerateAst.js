@@ -9,6 +9,7 @@ export class GenerateAst {
     }
     const outputDir = args[0]
     this.defineAst(outputDir, 'Expr', [
+      'Assign : Token name, Expr value',
       'Binary   : Expr left, Token operator, Expr right',
       'Grouping : Expr expression',
       'Literal  : Object value',
