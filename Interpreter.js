@@ -3,12 +3,13 @@ import { RuntimeError } from "./RuntimeError.js";
 
 export class Interpreter {
 
-    interpret(expression){
+    interpret(statements){
         try {
-         let   value = this.evaluate(expression);
-            console.log(this.stringify(value));
+            for(let statement of statements){
+                this.execute(statement)
+            }
         } catch (error) {
-            throw error
+            return RuntimeError(error)
         }
     }
 
@@ -76,6 +77,21 @@ export class Interpreter {
 
     evaluate(expr){
         return expr.accept(this);
+    }
+
+    execute(stmt){
+        stmt.accept(this);
+    }
+
+    visitExpressionStmt(stmt){
+        this.evaluate(stmt.expression);
+        return null;
+    }
+
+    visitPrintStmt(stmt){
+        let value = this.evaluate(stmt.expression);
+        console.log(this.stringify(value));
+        return null;
     }
 
     visitBinaryExpr(expr){

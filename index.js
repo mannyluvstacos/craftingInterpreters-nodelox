@@ -82,12 +82,12 @@ run (source) {
   // }
 
   const parser = new Parser(tokens);
-  let expression = parser.parse();
+  let statements = parser.parse();
 
   if(this.hadError) return;
 
-  // console.log(new AstPrinter().print(expression));
-  this.interpreter.interpret(expression);
+  // console.log(new AstPrinter().print(statements));
+  this.interpreter.interpret(statements);
 }
 
 /*
