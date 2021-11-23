@@ -103,8 +103,7 @@ export class Interpreter {
 
   visitVarStmt(stmt) {
     let value = null;
-    console.log({stmt})
-    if(stmt.initializer != null) {
+    if(stmt.initializer != null || typeof(stmt.initializer) != 'undefined') {
       value = this.evaluate(stmt.initializer);
     }
 
