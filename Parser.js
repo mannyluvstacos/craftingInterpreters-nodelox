@@ -54,6 +54,7 @@ export class Parser {
         let name = this.consume(TokenType.IDENTIFIER, "Expect variable name.");
         let initializer = null;
         if(this.match([TokenType.EQUAL])){
+            console.log("entered conditional")
             initializer = this.expression();
         }
 
