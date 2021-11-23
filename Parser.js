@@ -30,6 +30,7 @@ export class Parser {
         try {
             if(this.match([TokenType.VAR])) {
                 let varDeclaration = this.varDeclaration();
+                console.log({varDeclaration})
                 return varDeclaration
             }
 
@@ -53,9 +54,11 @@ export class Parser {
     }
 
     varDeclaration() {
+        console.log("branched to varDeclaration")
         let name = this.consume(TokenType.IDENTIFIER, "Expect variable name.");
         let initializer = null;
         if(this.match([TokenType.EQUAL])){
+            console.log("entered conditional")
             initializer = this.expression();
         }
 
@@ -155,16 +158,20 @@ export class Parser {
     }
 
     consume(type, message){
+        console.log("in consume", {type, message})
         if(this.check(type)) return this.advance();
 
         throw this.error(this.peek(), message);
     }
     
     check(type){
+        console.log("in check", {type});
         const isAtEnd = this.isAtEnd();
+        console.log({isAtEnd})
         if(isAtEnd) return false;
 
         const peekType = this.peek().type;
+        console.log({peekType})
         return peekType === type;
     }
 
@@ -178,6 +185,7 @@ export class Parser {
     }
 
     peek() {
+        console.log(this)
         return this.tokens[this.current];
     }
 

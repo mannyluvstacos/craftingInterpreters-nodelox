@@ -101,7 +101,7 @@ export class Scanner {
         }
         let text = this.source.substring(this.start, this.current);
         let type = this.keywords.get(text);
-        if(type === 'undefined') type = TokenType.IDENTIFIER;
+        if(typeof(type) === 'undefined') type = TokenType.IDENTIFIER;
         this.addToken(type);
     }
 
