@@ -16,4 +16,14 @@ super();
   return visitor.visitPrintStmt(this);
     }  expression;
 }
+export class Var extends Stmt {  constructor( name,initializer ) {
+super();
+    this.name = name;
+    this.initializer = initializer;
+  }
+  accept(visitor) {
+  return visitor.visitVarStmt(this);
+    }  name;
+  initializer;
+}
 

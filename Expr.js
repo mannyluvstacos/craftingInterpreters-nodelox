@@ -38,4 +38,12 @@ super();
     }  operator;
   right;
 }
+export class Variable extends Expr {  constructor( name ) {
+super();
+    this.name = name;
+  }
+  accept(visitor) {
+  return visitor.visitVariableExpr(this);
+    }  name;
+}
 
