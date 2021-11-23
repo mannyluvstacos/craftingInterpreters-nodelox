@@ -202,8 +202,8 @@ export class Parser {
                 case TokenType.RETURN:
                     return;
             }
+            this.advance();
         }
-        this.advance();
     }
 }
 

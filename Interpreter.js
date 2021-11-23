@@ -13,7 +13,7 @@ export class Interpreter {
         this.execute(statement)
       }
     } catch (error) {
-      return RuntimeError(error)
+      return new RuntimeError(error)
     }
   }
 
