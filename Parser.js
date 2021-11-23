@@ -12,16 +12,25 @@ export class Parser {
     }
 
     parse(){
-        try {
-            return this.expression();
-        } catch(error){
-            return null;
+        let statements = [];
+        while(!this.isAtEnd()){
+            statements.add(this.statement());
         }
+
+        if(process.env.DEBUG) console.log({statements})
+
+        return statements;
     }
 
     expression(){
         if(process.env.DEBUG) console.log('expression')
         return this.equality();
+    }
+
+    statement(){
+        if(this.match(TokenType.PRINT)) return this.printStatement();
+
+        return expressionStatement();
     }
 
     equality(){
