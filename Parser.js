@@ -50,9 +50,10 @@ export class Parser {
     }
 
     varDeclaration() {
+        console.log("branched to varDeclaration")
         let name = this.consume(TokenType.IDENTIFIER, "Expect variable name.");
         let initializer = null;
-        if(this,match([TokenType.EQUAL])){
+        if(this.match([TokenType.EQUAL])){
             initializer = this.expression();
         }
 
