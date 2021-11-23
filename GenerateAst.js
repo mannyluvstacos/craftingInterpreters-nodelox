@@ -13,6 +13,11 @@ export class GenerateAst {
       'Grouping : Expr expression',
       'Literal  : Object value',
       'Unary    : Token operator, Expr right'
+    ]);
+
+    this.defineAst(outputDir, 'Stmt', [
+      'Expression : Expr expression',
+      'Print : Expr expression'
     ])
   }
 
