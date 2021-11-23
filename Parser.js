@@ -29,6 +29,8 @@ export class Parser {
     declaration(){
         try {
             if(this.match([TokenType.VAR])) return this.varDeclaration();
+
+            return this.statement();
         } catch (error) {
             this.syncrhonize();
             return null;
@@ -48,7 +50,7 @@ export class Parser {
     }
 
     varDeclaration() {
-        let name = this.consume(TokenType.IDENTIFIER, "expect variable name.");
+        let name = this.consume(TokenType.IDENTIFIER, "Expect variable name.");
         let initializer = null;
         if(this,match([TokenType.EQUAL])){
             initializer = this.expression();

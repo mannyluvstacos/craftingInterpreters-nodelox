@@ -18,8 +18,8 @@ export class GenerateAst {
 
     this.defineAst(outputDir, 'Stmt', [
       'Expression : Expr expression',
-      'Print : Expr expression',
-      'Var : Token name, Expr initializer'
+      'Print      : Expr expression',
+      'Var        : Token name, Expr initializer'
     ])
   }
 

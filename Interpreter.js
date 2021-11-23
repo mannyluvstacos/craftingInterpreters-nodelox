@@ -1,7 +1,12 @@
 import { TokenType } from './TokenType.js'
 import { RuntimeError } from './RuntimeError.js'
+import { Environment } from './Environment.js'
 
 export class Interpreter {
+
+
+  environment = new Environment();
+
   interpret (statements) {
     try {
       for (const statement of statements) {
@@ -29,6 +34,10 @@ export class Interpreter {
 
     // unreachable code
     return null
+  }
+
+  visitVariableExpr(expr) {
+    return this.environment.get(expr.name);
   }
 
   checkNumberOperand (operator, operand) {
@@ -90,6 +99,17 @@ export class Interpreter {
     const value = this.evaluate(stmt.expression)
     console.log(this.stringify(value))
     return null
+  }
+
+  visitVarStmt(stmt) {
+    let value = null;
+    console.log({stmt})
+    if(stmt.initializer != null) {
+      value = this.evaluate(stmt.initializer);
+    }
+
+    this.environment.define(stmt.name.lexeme, value);
+    return null;
   }
 
   visitBinaryExpr (expr) {
