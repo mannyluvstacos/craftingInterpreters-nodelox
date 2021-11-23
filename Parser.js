@@ -2,6 +2,7 @@ import * as Expr from "./Expr.js";
 import * as Stmt from "./Stmt.js";
 import { TokenType } from "./TokenType.js";
 import * as err from "./error.js"
+import { Token } from "./Token.js";
 
 export class Parser {
     tokens = [];
@@ -14,7 +15,7 @@ export class Parser {
     parse(){
         let statements = [];
         while(!this.isAtEnd()){
-            statements.push(this.statement());
+            statements.push(this.declaration());
         }
 
 
@@ -23,6 +24,15 @@ export class Parser {
 
     expression(){
         return this.equality();
+    }
+
+    declaration(){
+        try {
+            if(this.match([TokenType.VAR])) return this.varDeclaration();
+        } catch (error) {
+            this.syncrhonize();
+            return null;
+        }
     }
 
     statement(){
@@ -35,6 +45,17 @@ export class Parser {
         let value = this.expression();
         this.consume(TokenType.SEMICOLON, "Expect ';' after value.");
         return new Stmt.Print(value);
+    }
+
+    varDeclaration() {
+        let name = this.consume(TokenType.IDENTIFIER, "expect variable name.");
+        let initializer = null;
+        if(this,match([TokenType.EQUAL])){
+            initializer = this.expression();
+        }
+
+        this.consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
+        return new Stmt.Var(namne, initializer);
     }
 
     expressionStatement(){
@@ -103,6 +124,10 @@ export class Parser {
 
         if(this.match([TokenType.NUMBER, TokenType.STRING])) {
             return new Expr.Literal(this.previous().literal);
+        }
+
+        if(this.match([TokenType.IDENTIFIER])){
+            return new Expr.Variable(this.previous());
         }
 
         if(this.match([TokenType.LEFT_PAREN])) {

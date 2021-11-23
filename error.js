@@ -31,7 +31,7 @@ export function tokenError (token, message) {
   }
 }
 
-export function runtimeError(error) {
-  console.log(error.message, +  "\n[line " + error.token.line + "]");
-  this.hadRuntimeError = true;
+export function runtimeError (error) {
+  console.log(error.message, +'\n[line ' + error.token.line + ']')
+  this.hadRuntimeError = true
 }

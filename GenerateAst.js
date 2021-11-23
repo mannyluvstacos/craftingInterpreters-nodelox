@@ -13,13 +13,13 @@ export class GenerateAst {
       'Grouping : Expr expression',
       'Literal  : Object value',
       'Unary    : Token operator, Expr right',
-      "Variable : Token name"
-    ]);
+      'Variable : Token name'
+    ])
 
     this.defineAst(outputDir, 'Stmt', [
       'Expression : Expr expression',
       'Print : Expr expression',
-      "Var : Token name, Expr initializer"
+      'Var : Token name, Expr initializer'
     ])
   }
 
