@@ -20,7 +20,7 @@ export class Lox {
       console.log('Usage: nodelox [script]')
       process.exit(9)
     } else if (args.length === 1) {
-      runFile(args[0])
+      this.runFile(args[0])
     } else {
       this.runPrompt()
     }
@@ -33,10 +33,10 @@ export class Lox {
 
  runFile (filePath) {
   const normalizedFilePath = path.normalize(filePath)
-  run(normalizedFilePath)
+  this.run(normalizedFilePath)
 
   if (this.hadError) process.exit(9)
-  if (hadRuntimeError) System.exit(70);
+  if (this.hadRuntimeError) System.exit(70);
 }
 
 /*   private static void runPrompt() throws IOException {
@@ -83,7 +83,7 @@ run (source) {
 
   const parser = new Parser(tokens);
   let statements = parser.parse();
-
+  
   if(this.hadError) return;
 
   // console.log(new AstPrinter().print(statements));

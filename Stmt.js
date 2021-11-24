@@ -1,5 +1,13 @@
 export class Stmt {
 }
+export class Block extends Stmt {  constructor( statements ) {
+super();
+    this.statements = statements;
+  }
+  accept(visitor) {
+  return visitor.visitBlockStmt(this);
+    }  statements;
+}
 export class Expression extends Stmt {  constructor( expression ) {
 super();
     this.expression = expression;

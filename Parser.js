@@ -42,6 +42,7 @@ export class Parser {
 
     statement(){
         if(this.match([TokenType.PRINT])) return this.printStatement();
+        if(this.match([TokenType.LEFT_BRACE])) return new Stmt.Block(this.block());
 
         return this.expressionStatement();
     }
@@ -69,6 +70,14 @@ export class Parser {
         return new Stmt.Expression(expr);
     }
     
+    block() {
+        let statements = [];
+        while(!this.check(TokenType.RIGHT_BRACE) && !this.isAtEnd()){
+            statements.push(this.declaration());
+        }
+        this.consume(TokenType.RIGHT_BRACE, "Expect '}' after block.");
+        return statements;
+    }
     assignment() {
         let expr = this.equality();
 
@@ -76,12 +85,14 @@ export class Parser {
             let equals = this.previous();
             let value = this.assignment();
 
-            if(expr instanceof Expr.Variable) {
+            const instanceOfVariable =  expr instanceof Expr.Variable;
+            if(instanceOfVariable) {
                 let name = expr.name;
-                return new Expr.Assign(name, value);
+                let expressionAssignment = new Expr.Assign(name, value);
+                return expressionAssignment;
             }
 
-            err.error(this.equals, "Invalid assignment target.");
+            err.error(equals, "Invalid assignment target.");
         }
 
         return expr;

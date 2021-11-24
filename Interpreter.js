@@ -90,6 +90,24 @@ export class Interpreter {
     stmt.accept(this)
   }
 
+  executeBlock(statements, environment){
+    const previous = this.environment;
+    try {
+      
+      this.environment = environment;
+      for(let statement of statements){
+        this.execute(statement)
+      }
+    } finally{
+      this.environment = previous
+    }
+  }
+
+  visitBlockStmt(stmt){
+    this.executeBlock(stmt.statements, new Environment(this.environment));
+    return null;
+  }
+
   visitExpressionStmt (stmt) {
     this.evaluate(stmt.expression)
     return null

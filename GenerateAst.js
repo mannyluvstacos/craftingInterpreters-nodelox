@@ -18,6 +18,7 @@ export class GenerateAst {
     ])
 
     this.defineAst(outputDir, 'Stmt', [
+      'Block : List<Stmt> statements',
       'Expression : Expr expression',
       'Print      : Expr expression',
       'Var        : Token name, Expr initializer'
@@ -32,7 +33,6 @@ export class GenerateAst {
     writer.write('}\n')
 
     for (const type of types) {
-      console.log({ type })
       const [className, fieldList] = type.split(':')
       this.defineType(writer, baseName, className.trim(), fieldList.trim())
       writer.write('\n')
