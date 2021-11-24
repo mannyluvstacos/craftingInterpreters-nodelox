@@ -1,6 +1,7 @@
 
 import * as readline from 'node:readline/promises'
 import * as path from 'node:path'
+import * as fs from 'node:fs'
 import { stdin as input, stdout as output } from 'process'
 import {Scanner} from './Scanner.js'
 import {error as importedError} from './error.js'
@@ -20,7 +21,8 @@ export class Lox {
       console.log('Usage: nodelox [script]')
       process.exit(9)
     } else if (args.length === 1) {
-      this.runFile(args[0])
+      const fileName = args[0]
+      this.runFile(fileName)
     } else {
       this.runPrompt()
     }
@@ -33,7 +35,8 @@ export class Lox {
 
  runFile (filePath) {
   const normalizedFilePath = path.normalize(filePath)
-  this.run(normalizedFilePath)
+  const data = fs.readFileSync(normalizedFilePath, {encoding: 'utf8'});
+  this.run(data)
 
   if (this.hadError) process.exit(9)
   if (this.hadRuntimeError) System.exit(70);
@@ -83,7 +86,6 @@ run (source) {
 
   const parser = new Parser(tokens);
   let statements = parser.parse();
-  
   if(this.hadError) return;
 
   // console.log(new AstPrinter().print(statements));

@@ -18,7 +18,6 @@ export class Parser {
             statements.push(this.declaration());
         }
 
-
         return statements;
     }
 
@@ -28,12 +27,13 @@ export class Parser {
 
     declaration(){
         try {
-            if(this.match([TokenType.VAR])) {
+            const tokenMatch = this.match([TokenType.VAR]);
+            if(tokenMatch) {
                 let varDeclaration = this.varDeclaration();
                 return varDeclaration
             }
-
-            return this.statement();
+            const currentStatement = this.statement();
+            return currentStatement
         } catch (error) {
             this.syncrhonize();
             return null;
@@ -175,7 +175,8 @@ export class Parser {
 
     match(types){
         for(let type of types){
-            if(this.check(type)){
+            const typeCheck = this.check(type)
+            if(typeCheck){
                 this.advance();
                 return true;
             }
@@ -207,7 +208,8 @@ export class Parser {
     }
 
     peek() {
-        return this.tokens[this.current];
+        const peek = this.tokens[this.current];
+        return peek;
     }
 
     previous() {
