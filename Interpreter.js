@@ -21,6 +21,18 @@ export class Interpreter {
     return expr.value
   }
 
+  visitLogicalExpr(expr) {
+    let left = this.evaluate(expr.left);
+
+    if(expr.operator.type === TokenType.OR) {
+      if(this.isTruthy(left)) return left;
+    } else {
+      if(!this.isTruthy(left)) return left;
+    }
+
+    return this.evaluate(expr.right);
+  }
+
   visitUnaryExpr (expr) {
     const right = this.evaluate(expr.right)
 
@@ -65,7 +77,7 @@ export class Interpreter {
   }
 
   stringify (object) {
-    if (object === null) return 'nil'
+    if (object == null) return 'nil'
 
     if (typeof (object) === 'number') {
       let text = object.toString()
@@ -113,6 +125,15 @@ export class Interpreter {
     return null
   }
 
+  visitIfStmt(stmt){
+    if(this.isTruthy(this.evaluate(stmt.condition))){
+      this.execute(stmt.thenBranch);
+    } else if(stmt.elseBranch != null){
+      this.execute(stmt.elseBranch);
+    }
+    return null;
+  }
+
   visitPrintStmt (stmt) {
     const value = this.evaluate(stmt.expression)
     console.log(this.stringify(value))
@@ -121,11 +142,18 @@ export class Interpreter {
 
   visitVarStmt(stmt) {
     let value = null;
-    if(stmt.initializer != null || typeof(stmt.initializer) != 'undefined') {
+    if(!(stmt.initializer == null)) {
       value = this.evaluate(stmt.initializer);
     }
 
     this.environment.define(stmt.name.lexeme, value);
+    return null;
+  }
+
+  visitWhileStmt(stmt){
+    while(this.isTruthy(this.evaluate(stmt.condition))){
+      this.execute(stmt.body);
+    }
     return null;
   }
 

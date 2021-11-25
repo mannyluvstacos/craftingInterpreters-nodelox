@@ -16,6 +16,18 @@ super();
   return visitor.visitExpressionStmt(this);
     }  expression;
 }
+export class If extends Stmt {  constructor( condition,thenBranch,elseBranch ) {
+super();
+    this.condition = condition;
+    this.thenBranch = thenBranch;
+    this.elseBranch = elseBranch;
+  }
+  accept(visitor) {
+  return visitor.visitIfStmt(this);
+    }  condition;
+  thenBranch;
+  elseBranch;
+}
 export class Print extends Stmt {  constructor( expression ) {
 super();
     this.expression = expression;
@@ -33,5 +45,15 @@ super();
   return visitor.visitVarStmt(this);
     }  name;
   initializer;
+}
+export class While extends Stmt {  constructor( condition,body ) {
+super();
+    this.condition = condition;
+    this.body = body;
+  }
+  accept(visitor) {
+  return visitor.visitWhileStmt(this);
+    }  condition;
+  body;
 }
 

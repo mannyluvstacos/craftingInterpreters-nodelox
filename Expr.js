@@ -38,6 +38,18 @@ super();
   return visitor.visitLiteralExpr(this);
     }  value;
 }
+export class Logical extends Expr {  constructor( left,operator,right ) {
+super();
+    this.left = left;
+    this.operator = operator;
+    this.right = right;
+  }
+  accept(visitor) {
+  return visitor.visitLogicalExpr(this);
+    }  left;
+  operator;
+  right;
+}
 export class Unary extends Expr {  constructor( operator,right ) {
 super();
     this.operator = operator;

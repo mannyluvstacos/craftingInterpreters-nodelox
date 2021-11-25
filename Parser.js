@@ -17,7 +17,7 @@ export class Parser {
         while(!this.isAtEnd()){
             statements.push(this.declaration());
         }
-
+        //DEBUG console.log('parse', {statements})
         return statements;
     }
 
@@ -33,6 +33,7 @@ export class Parser {
                 return varDeclaration
             }
             const currentStatement = this.statement();
+            // DEBUG console.log({currentStatement})
             return currentStatement
         } catch (error) {
             this.syncrhonize();
@@ -41,10 +42,114 @@ export class Parser {
     }
 
     statement(){
-        if(this.match([TokenType.PRINT])) return this.printStatement();
-        if(this.match([TokenType.LEFT_BRACE])) return new Stmt.Block(this.block());
+        let statement = null;
+        if(this.match([TokenType.FOR])) {
+             statement = this.forStatement();
+             //DEBUG console.log('for',{statement})
+            return statement
+        }
+        if(this.match([TokenType.IF])) {
+             statement = this.ifStatement();
+             //DEBUG console.log('if',{statement})
+            return statement
+        }
+        if(this.match([TokenType.PRINT])) {
+             statement = this.printStatement();
+             //DEBUG console.log('print',{statement})
+            return statement
+        }
+        if(this.match([TokenType.WHILE])) {
+             statement = this.whileStatement();
+             //DEBUG console.log('while',{statement})
+            return statement
+        }
+        if(this.match([TokenType.LEFT_BRACE])) {
+             statement = new Stmt.Block(this.block());
+             //DEBUG console.log('left brace',{statement})
+            return statement
+        }
+        statement = this.expressionStatement();
+        //DEBUG console.log('statement', {statement})
+        return statement
+    }
 
-        return this.expressionStatement();
+    forStatement(){
+        
+        this.consume(TokenType.LEFT_PAREN, "Expect '(' after 'for'.");
+
+        //initializer
+        let initializer = null;
+        if(this.match([TokenType.SEMICOLON])){
+            initializer = null;
+        } else if(this.match([TokenType.VAR])){
+            initializer = this.varDeclaration();
+            //DEBUG console.log('initializer present', {initializer})
+        } else {
+            initializer = this.expressionStatement();
+        }
+
+        //DEBUG console.log({initializer})
+
+        //condition
+        let condition = null;
+        if(!this.check(TokenType.SEMICOLON)){
+            condition = this.expression()
+        }
+        this.consume(TokenType.SEMICOLON, "Expect ';' after loop condition.");
+
+        //DEBUG console.log({condition})
+        //increment
+        let increment = null;
+        if(!this.check(TokenType.RIGHT_PAREN)){
+            increment = this.expression();
+        }
+        this.consume(TokenType.RIGHT_PAREN, "Expect ')' after for clauses.");
+
+        //DEBUG console.log({increment})
+        //Body
+
+        let body = this.statement();
+
+        if(increment != null) {
+            //DEBUG console.log('increment not null, assigning...')
+            body = new Stmt.Block(
+                [
+                    body,
+                    new Stmt.Expression(increment)
+                ]
+            );
+            //DEBUG console.log('assigned increment', {body})
+        }
+
+        if(condition == null) {
+            //DEBUG console.log('condition is null')
+            condition = new Expr.Literal(true);
+            //DEBUG console.log('condition was null, now assigned', {condition})
+        }
+
+        //DEBUG console.log('Desugaring using while loop')
+        body = new Stmt.While(condition, body);
+        //DEBUG console.log('Desugared', {body});
+
+        if(initializer != null) {
+            body = new Stmt.Block([initializer, body]);
+        }
+        //DEBUG console.log({body})
+        return body;
+    }
+
+    ifStatement(){
+        this.consume(TokenType.LEFT_PAREN, "Expect '(' after 'if'.");
+        const condition = this.expression();
+        this.consume(TokenType.RIGHT_PAREN, "Expect ')' after if condition.");
+
+        const thenBranch = this.statement();
+        let elseBranch = null;
+        if(this.match([TokenType.ELSE])){
+            elseBranch = this.statement();
+        }
+
+        return new Stmt.If(condition, thenBranch, elseBranch);
     }
 
     printStatement(){
@@ -64,6 +169,17 @@ export class Parser {
         return new Stmt.Var(name, initializer);
     }
 
+    whileStatement() {
+        //DEBUG console.log('inside whileStatement')
+        this.consume(TokenType.LEFT_PAREN, "Expect '(' after 'while'.");
+        let condition = this.expression();
+        this.consume(TokenType.RIGHT_PAREN, "Expect ')' after condition.");
+        let body = this.statement();
+
+        //DEBUG console.log('whileStatement', {condition, body})
+        return new Stmt.While(condition, body);
+    }
+
     expressionStatement(){
         let expr = this.expression();
         this.consume(TokenType.SEMICOLON, "Expect ';' after expression.");
@@ -79,7 +195,7 @@ export class Parser {
         return statements;
     }
     assignment() {
-        let expr = this.equality();
+        let expr = this.or();
 
         if(this.match([TokenType.EQUAL])) {
             let equals = this.previous();
@@ -93,6 +209,30 @@ export class Parser {
             }
 
             err.error(equals, "Invalid assignment target.");
+        }
+
+        return expr;
+    }
+
+    or() {
+        let expr = this.and();
+
+        while(this.match([TokenType.OR])) {
+            let operator = this.previous();
+            let right = this.and();
+            expr = new Expr.Logical(expr, operator, right)
+        }
+
+        return expr;
+    }
+
+    and() {
+        let expr = this.equality();
+
+        while(this.match([TokenType.AND])){
+            let operator = this.previous();
+            let right = this.equality();
+            expr = new Expr.Logical(expr, operator, right);
         }
 
         return expr;
@@ -176,6 +316,7 @@ export class Parser {
     match(types){
         for(let type of types){
             const typeCheck = this.check(type)
+            //DEBUG console.log({type,typeCheck});
             if(typeCheck){
                 this.advance();
                 return true;
