@@ -291,6 +291,22 @@ export class Parser {
         return this.call();
     }
 
+    finishCall(callee) {
+        let arguments = [];
+        if(!this.check(TokenType.RIGHT_PAREN)){
+            do{
+                if(arguments.length() >= 255) {
+                    this.error(this.peek(), "Cannot have more than 255 arguments.")
+                }
+                arguments.push(this.expression());
+            } while(this.match([TokenType.COMMA]));
+        }
+
+        let paren = this.consume(TokenType.RIGHT_PAREN, "Expect ')' after arguments.");
+
+        return new Expr.Call(callee, paren, arguments);
+    }
+
     call(){
         let expr = this.primary();
 

@@ -1,6 +1,8 @@
 import { TokenType } from './TokenType.js'
 import { RuntimeError } from './RuntimeError.js'
 import { Environment } from './Environment.js'
+import * as LoxCallable from './LoxCallable.js'
+import * as LoxFunction from './LoxFunction.js'
 
 export class Interpreter {
 
@@ -207,5 +209,22 @@ export class Interpreter {
 
     // unreachable code
     return null
+  }
+
+  visitCallExpr(expr) {
+    let callee = this.evaluate(expr.callee);
+
+    let arguments = [];
+
+    for(argument of expr.arguments){
+      arguments.push(this.evaluate(argument));
+    }
+
+    if(!(callee instanceof LoxCallable)) {
+      throw new RuntimeError(expr.paraen, "Can only call functions and classes.");
+    }
+
+    let func = new LoxFunction(callee);
+    return func.call(this, arguments);
   }
 }
