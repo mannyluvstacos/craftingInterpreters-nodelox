@@ -288,7 +288,21 @@ export class Parser {
             let right = this.unary();
             return new Expr.Unary(operator, right);
         }
-        return this.primary();
+        return this.call();
+    }
+
+    call(){
+        let expr = this.primary();
+
+        while(true) {
+            if(this.match([TokenType.LEFT_PAREN])){
+                expr = this.finishCall(expr);
+            } else {
+                break;
+            }
+        }
+
+        return expr;
     }
 
     primary(){
