@@ -16,6 +16,18 @@ super();
   return visitor.visitExpressionStmt(this);
     }  expression;
 }
+export class Func extends Stmt {  constructor( name,params,body ) {
+super();
+    this.name = name;
+    this.params = params;
+    this.body = body;
+  }
+  accept(visitor) {
+  return visitor.visitFuncStmt(this);
+    }  name;
+  params;
+  body;
+}
 export class If extends Stmt {  constructor( condition,thenBranch,elseBranch ) {
 super();
     this.condition = condition;

@@ -11,7 +11,7 @@ export class GenerateAst {
     this.defineAst(outputDir, 'Expr', [
       'Assign : Token name, Expr value',
       'Binary   : Expr left, Token operator, Expr right',
-      'Call     : Expr callee, Token paren, List<Expr> arguments',
+      'Call     : Expr callee, Token paren, List<Expr> argments',
       'Grouping : Expr expression',
       'Literal  : Object value',
       'Logical  : Expr left, Token operator, Expr right',
@@ -22,6 +22,8 @@ export class GenerateAst {
     this.defineAst(outputDir, 'Stmt', [
       'Block : List<Stmt> statements',
       'Expression : Expr expression',
+      'Func   : Token name, List<Token> params,' +
+                  ' List<Stmt> body',
       'If         : Expr condition, Stmt thenBranch,' +
                   ' Stmt elseBranch',
       'Print      : Expr expression',

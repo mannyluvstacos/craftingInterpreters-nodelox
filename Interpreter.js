@@ -2,12 +2,20 @@ import { TokenType } from './TokenType.js'
 import { RuntimeError } from './RuntimeError.js'
 import { Environment } from './Environment.js'
 import * as LoxCallable from './LoxCallable.js'
-import * as LoxFunction from './LoxFunction.js'
+import {LoxFunction} from './LoxFunction.js'
 
 export class Interpreter {
 
 
-  environment = new Environment();
+  globals = new Environment();
+  environment = this.globals;
+
+  constructor(){
+    this.globals.clock = new LoxFunction();
+    this.globals.clock.arity = ()=>{ return 0;};
+    this.globals.call = ()=>{ return parseFloat(Date.now())/1000.0};
+    this.globals.toString = ()=>{return "<native fn>"};
+  }
 
   interpret (statements) {
     try {
@@ -97,6 +105,7 @@ export class Interpreter {
   }
 
   evaluate (expr) {
+    console.log('evaluate', {expr})
     return expr.accept(this)
   }
 
@@ -137,6 +146,7 @@ export class Interpreter {
   }
 
   visitPrintStmt (stmt) {
+    console.log('visitPrintStmt',{stmt})
     const value = this.evaluate(stmt.expression)
     console.log(this.stringify(value))
     return null
@@ -214,10 +224,10 @@ export class Interpreter {
   visitCallExpr(expr) {
     let callee = this.evaluate(expr.callee);
 
-    let arguments = [];
+    let argments = [];
 
-    for(argument of expr.arguments){
-      arguments.push(this.evaluate(argument));
+    for(argument of expr.argments){
+      argments.push(this.evaluate(argument));
     }
 
     if(!(callee instanceof LoxCallable)) {
@@ -225,6 +235,9 @@ export class Interpreter {
     }
 
     let func = new LoxFunction(callee);
-    return func.call(this, arguments);
+    if (argments.length != func.arity()) {
+      throw new RuntimeError(expr.paren, `Expected ${func.arity()} argments but got ${argments.length}.`)
+    }
+    return func.call(this, argments);
   }
 }

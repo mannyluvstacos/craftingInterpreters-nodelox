@@ -46,20 +46,62 @@ export class Scanner {
     scanToken(){
         let character = this.advance();
         switch (character) {
-            case '(': this.addToken(TokenType.LEFT_PAREN); break;
-            case ')': this.addToken(TokenType.RIGHT_PAREN); break;
-            case '{': this.addToken(TokenType.LEFT_BRACE); break;
-            case '}': this.addToken(TokenType.RIGHT_BRACE); break;
-            case ',': this.addToken(TokenType.COMMA); break;
-            case '.': this.addToken(TokenType.DOT); break;
-            case '-': this.addToken(TokenType.MINUS); break;
-            case '+': this.addToken(TokenType.PLUS); break;
-            case ';': this.addToken(TokenType.SEMICOLON); break;
-            case '*': this.addToken(TokenType.STAR); break;
-            case '!':this.addToken(this.match('=') ? TokenType.BANG_EQUAL:TokenType.BANG ); break;
-            case '=':this.addToken(this.match('=') ? TokenType.EQUAL_EQUAL: TokenType.EQUAL ); break;
-            case '<':this.addToken(this.match('=') ? TokenType.LESS_EQUAL: TokenType.LESS ); break;
-            case '>':this.addToken(this.match('=') ? TokenType.GREATER_EQUAL:TokenType.GREATER); break;
+            case '(':{
+                console.log(`case '('`)
+                this.addToken(TokenType.LEFT_PAREN); break; 
+            }
+            case ')':{
+                console.log(`case ')'`)
+                this.addToken(TokenType.RIGHT_PAREN); break; 
+            }
+            case '{':{
+                console.log(`case '{'`)
+                this.addToken(TokenType.LEFT_BRACE); break; 
+            }
+            case '}':{
+                console.log(`case '}'`)
+                this.addToken(TokenType.RIGHT_BRACE); break; 
+            }
+            case ',':{
+                console.log(`case ','`)
+                this.addToken(TokenType.COMMA); break; 
+            }
+            case '.':{
+                console.log(`case '.'`)
+                this.addToken(TokenType.DOT); break; 
+            }
+            case '-':{
+                console.log(`case '-'`)
+                this.addToken(TokenType.MINUS); break; 
+            }
+            case '+':{
+                console.log(`case '+'`)
+                this.addToken(TokenType.PLUS); break; 
+            }
+            case ';':{
+                console.log(`case ';'`)
+                this.addToken(TokenType.SEMICOLON); break; 
+            }
+            case '*':{
+                console.log(`case '*'`)
+                this.addToken(TokenType.STAR); break; 
+            }
+            case '!':{
+                console.log(`case '!'`)
+                this.addToken(this.match('=') ? TokenType.BANG_EQUAL:TokenType.BANG ); break; 
+        }
+            case '=':{
+                console.log(`case '='`)
+                this.addToken(this.match('=') ? TokenType.EQUAL_EQUAL: TokenType.EQUAL ); break; 
+        }
+            case '<':{
+                console.log(`case '<'`)
+                this.addToken(this.match('=') ? TokenType.LESS_EQUAL: TokenType.LESS ); break; 
+        }
+            case '>':{
+                console.log(`case '>'`)
+                this.addToken(this.match('=') ? TokenType.GREATER_EQUAL:TokenType.GREATER); break; 
+        }
             case '/':
                 if(this.match('/')) {
                     while(this.peek() != '\n' && !this.isAtEnd()) this.advance();

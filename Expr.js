@@ -22,17 +22,17 @@ super();
   operator;
   right;
 }
-export class Call extends Expr {  constructor( callee,paren,arguments ) {
+export class Call extends Expr {  constructor( callee,paren,argments ) {
 super();
     this.callee = callee;
     this.paren = paren;
-    this.arguments = arguments;
+    this.argments = argments;
   }
   accept(visitor) {
   return visitor.visitCallExpr(this);
     }  callee;
   paren;
-  arguments;
+  argments;
 }
 export class Grouping extends Expr {  constructor( expression ) {
 super();

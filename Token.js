@@ -12,6 +12,7 @@ export class Token {
   }
 
   toString () {
+    console.log('Token toString')
     return this.type + ' ' + this.lexeme + ' ' + this.literal
   }
 }
